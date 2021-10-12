@@ -1,0 +1,89 @@
+import React, { useState } from 'react'
+import { IState as Props } from "../App";
+
+interface IProps {
+    setPeople: React.Dispatch<React.SetStateAction<Props["people"]>>
+    people: Props["people"]
+}
+
+const AddToList: React.FC<IProps> = ({setPeople, people}) => {
+
+    const [input, setInput] = useState({
+        nome: "",
+        idade: "", 
+        note: "",
+        img: ""
+    }) 
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleClick = () => {
+        if(!input.nome || !input.idade) return
+
+        setPeople([
+            ...people,
+            {
+                nome: input.nome,
+                idade: parseInt(input.idade),
+                img: input.img,
+                note: input.note
+            }
+        ]);
+
+        setInput({
+            nome: "",
+            idade: "",
+            img: "",
+            note: ""
+        })
+    }
+
+    return (
+        <div className="AddToList">
+            <input 
+                type="text"
+                onChange={handleChange}
+                className="AddToList-input"
+                name="nome"
+                value={input.nome}
+                placeholder="Nome"
+            />
+            <input 
+                type="text"
+                onChange={handleChange}
+                className="AddToList-input"
+                name="idade"
+                value={input.idade}
+                placeholder="Idade"
+            />
+            <input 
+                type="text"
+                onChange={handleChange}
+                className="AddToList-input"
+                name="img"
+                value={input.img}
+                placeholder="Image Url"
+            />
+            <textarea
+                onChange={handleChange}
+                className="AddToList-input"
+                name="note"
+                value={input.note}
+                placeholder="Note"
+            />
+            <button
+                onClick={handleClick}
+                className="AddToList-btn"
+            >
+                Add to List
+            </button>
+        </div>
+    )
+}
+
+export default AddToList
